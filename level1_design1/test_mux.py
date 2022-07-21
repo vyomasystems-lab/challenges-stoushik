@@ -46,4 +46,4 @@ async def test_mux_select_30(dut):
 
     await Timer (2, units='ns')
 
-    assert dut.out.value == i30, "Mux result is incorrect: select value = {s}, obtained value = {op}, expected value = {out30}".format (s = 30, i30 = (dut.inp30.value), op=int(dut.out.value), out30=i30)
+    assert dut.out.value == i30, "Mux result is incorrect: select value = {s}, obtained value = {op}, expected value = {out30}".format (s = (dut.sel.value), i30 = (dut.inp30.value), op=int(dut.out.value), out30=i30)
