@@ -10,7 +10,7 @@ module fa(sum,cout,a,b,cin);
 	output sum,cout;
 	wire s,c1,c2;
 	ha ha1(s,c1,a,b), ha2(sum,c2,s,cin);
-	and(cout,c2,c1);
+	or(cout,c2,c1);
 endmodule
 
 module add4(sum,a,b,cin);
