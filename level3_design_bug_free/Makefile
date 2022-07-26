@@ -4,10 +4,10 @@ TOPLEVEL_LANG ?= verilog
 
 PWD=$(shell pwd)
 
-VERILOG_SOURCES = $(PWD)/Adder.v               # provide your design path
+VERILOG_SOURCES = $(PWD)/Adder_bug_free.v               # provide your design path
 
-TOPLEVEL := add4          # design file
-MODULE   := Adder_test    # test file
+TOPLEVEL := add4                   # design file
+MODULE   := Adder_test_bug_free    # test file
 
 include $(shell cocotb-config --makefiles)/Makefile.sim
 
