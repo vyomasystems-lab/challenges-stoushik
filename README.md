@@ -71,10 +71,10 @@ Based on the above test input and analysing the design, we see the following
 
 ```
       5'b11100: out = inp28;
-      5'b11101: out = inp29;   // The same select line is present for inp30.
+      5'b11101: out = inp29;   // The select line for 30 is not present.
       default: out = 0;
 ```
-For the MUX design, the line ``5'b11110: out = inp30;`` should be included before default.
+For the MUX design, the line ``5'b11110: out = inp30;`` should be included before default and after ``5'b11101: out = inp29;``.
 
 ### Design Fix
 Updating the design and re-running the test makes the test pass.
