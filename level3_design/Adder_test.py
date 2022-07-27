@@ -17,4 +17,4 @@ async def Fixed_Adder_test1(dut):
 
     await Timer (2, units='ns')
 
-    assert dut.sum.value == a+b+cin, f"Adder result is incorrect: Obtained Output = {dut.sum.value}, Expected Output = "+str(a+b+cin)
+    assert dut.sum.value == a+b+cin, f"Adder result is incorrect: Obtained Output = {dut.sum.value} ("+str(13)+"), Expected Output = "+str(a+b+cin)
