@@ -81,7 +81,7 @@ Updating the design and re-running the test makes the test pass.
 
 ![Screenshot from 2022-07-26 13-02-34](https://user-images.githubusercontent.com/109406155/180949784-ef36adcb-53db-4b44-adf7-f662a01023a8.png)
 
-The bug free design is checked in as leve1_design1_bug_free\mux.v
+The bug free design is checked in as leve1_design1_bug_free\mux_bug_free.v
 
 _________________________________________________________________________________________________________________________________________________________
 
@@ -127,4 +127,4 @@ Updating the design and re-running the test makes the test pass.
 
 ![Screenshot from 2022-07-27 11-51-04](https://user-images.githubusercontent.com/109406155/181175705-e0aced06-154f-4a38-8bc7-0e0a43fff69c.png)
 
-The bug free design is checked in as Adder_bug_free.v
+The bug free design is checked in as level1_design_bug_free\Adder_bug_free.v
