@@ -85,6 +85,54 @@ The bug free design is checked in as leve1_design1_bug_free\mux_bug_free.v
 
 _________________________________________________________________________________________________________________________________________________________
 
+# Level 1 Design 2 (Sequence Detector: 1011) Design Verification
+# Verification Environment
+The [CoCoTb](https://www.cocotb.org/) based Python test is developed as explained. The test drives inputs to the Design Under Test (1011 Sequnce Detector module here) which takes inp_bit, clock and reset bit input. The output gives a high when sequence is detected after reset is low from high.
+
+# Test Case Scenario 1
+The values are assigned to the input port using
+```
+dut.inp_bit.value = 10                                            // 1-bit
+dut.reset.value = <declared as part of provided code sample>      // 1-bit
+dut.clk.value = <declared as part of provided code sample>        // 1-bit
+```
+
+The assert statement is used for comparing the adder's output to the expected value.
+
+### Test Scenario **(Important)**
+- Test Sequence:   1 0 1 1 0 1 1
+- Expected Output: 0 0 0 1 0 0 1
+- Observed Output: 0 0 0 1 0 0 0
+
+The following error is seen:
+```
+assert seq_seen_out == output, f"The output sequence is incorrent. It is not overlaping: Obtained Output = "+seq_seen_str+", Expected Output = "+output_str
+                  AssertionError: The output sequence is incorrent. It is not overlaping: Obtained Output = 0001000, Expected Output = 0001001
+```
+Output mismatches for the above inputs proving that there is a design bug
+
+*************************************************************Change from this section************************************************************
+
+### Design Bug
+Based on the above test input and analysing the design, we see the following
+
+```
+      ha ha1(s,c1,a,b), ha2(sum,c2,s,cin);
+	     and(cout,c2,c1);
+```
+In the Full adder module, the final carry output is formed by the OR gate, but in the design, it is declared as AND gate. This causes the carry bit to not be reflected in any one full adder which produces a carry bit. In a full adder, the carry bit is not high if any one of the carry bit of the individual half adder is low. Hence, this case does not produce failed case in any of the addition combination.  Therefore, it is required to give fixed value to expose the bug instead of randomized case.
+
+For the Adder design, the logic should be ``or(cout,c2,c1);`` instead of ``and(cout,c2,c1);`` as in the 'fa' mudule in the design code.
+
+### Design Fix
+Updating the design and re-running the test makes the test pass.
+
+![Screenshot from 2022-07-27 11-51-04](https://user-images.githubusercontent.com/109406155/181175705-e0aced06-154f-4a38-8bc7-0e0a43fff69c.png)
+
+The bug free design is checked in as level1_design_bug_free\Adder_bug_free.v
+
+_________________________________________________________________________________________________________________________________________________________
+
 # Level 3 Design (4-bit adder using Mixed Modelling) Design Verification
 # Verification Environment
 The [CoCoTb](https://www.cocotb.org/) based Python test is developed as explained. The test drives inputs to the Design Under Test (4-bit adder module here) which takes 2 4-bit numbers 'a' and 'b' and a 1-bit carry input to a full adder which is connected in series to the consecutive full adders. The output gives a 5-bit sum.
