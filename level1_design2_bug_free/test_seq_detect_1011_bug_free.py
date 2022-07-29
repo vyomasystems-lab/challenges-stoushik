@@ -23,8 +23,8 @@ async def test_seq_bug1(dut):
     dut.reset.value = 0
     await FallingEdge(dut.clk)
 
-    sequence = [1,0,1,1,0,1,1]
-    output = [0,0,0,1,0,0,1]
+    sequence = [1,0,1,0,1,1,0,1,1]
+    output = [0,0,0,0,0,1,0,0,1]
     seq_seen_out = []
     
     print("\nInput sequence: ",end='   ')
