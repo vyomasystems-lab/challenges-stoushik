@@ -104,6 +104,8 @@ The assert statement is used for comparing the adder's output to the expected va
 - Expected Output: 0 0 0 1 0 0 1
 - Observed Output: 0 0 0 1 0 0 0
 
+The Sequence detector must be overlapping as well as in this case, the fourth bit resembles the LSB of the first 4 bit sequence and also the MSB followed by the next three bit sequence forming a 4-bit sequence. Hence the detector needs to be high twince during the bitstream as shown in the Expected output. In contradiction, the obtained output does not match with the desired output. This causes a bug which is exposed in the code. 
+
 The following error is seen:
 ```
 assert seq_seen_out == output, f"The output sequence is incorrent. It is not overlaping: Obtained Output = "+seq_seen_str+", Expected Output = "+output_str
@@ -111,16 +113,25 @@ assert seq_seen_out == output, f"The output sequence is incorrent. It is not ove
 ```
 Output mismatches for the above inputs proving that there is a design bug
 
-*************************************************************Change from this section************************************************************
-
 ### Design Bug
 Based on the above test input and analysing the design, we see the following
 
 ```
-      ha ha1(s,c1,a,b), ha2(sum,c2,s,cin);
-	     and(cout,c2,c1);
+            SEQ_101:
+      begin
+        if(inp_bit == 1)
+          next_state = SEQ_1011;
+        else
+          next_state = IDLE;  // Bug1
+      end
+      SEQ_1011:
+      begin
+        next_state = IDLE;    // Bug2
+      end
 ```
-In the Full adder module, the final carry output is formed by the OR gate, but in the design, it is declared as AND gate. This causes the carry bit to not be reflected in any one full adder which produces a carry bit. In a full adder, the carry bit is not high if any one of the carry bit of the individual half adder is low. Hence, this case does not produce failed case in any of the addition combination.  Therefore, it is required to give fixed value to expose the bug instead of randomized case.
+For the sequence detector to be overlapping, The control must be moved to 2nd bit of the sequence in the case of line 'bug1' because if 0 is observed after 101, it can be an overlapping case where the sequence starts from the 3rd bit, i.e., '1' in the sequence. Again this is a similar condition which causes an error in the case of line 'bug2', because after 1011 is detected, the control is unconditionally moved to the absolute beginning, ignoring the case that the LSB of the current detected sequence may also be the MSB of another sequence that follows.
+
+*************************************************************Change from this section************************************************************
 
 For the Adder design, the logic should be ``or(cout,c2,c1);`` instead of ``and(cout,c2,c1);`` as in the 'fa' mudule in the design code.
 
